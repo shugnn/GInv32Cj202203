@@ -1,7 +1,5 @@
 #include"Trading.h"
 #include"Changjiang.h"
-extern string RulLearn;
-extern string RstTrade;
 extern HANDLE hmut, hevt[3];
 extern CChangjiang *pCCJ;
 CTra *pCTrading; 
@@ -69,33 +67,33 @@ void CTra::FetchAccount()
 }
 bool CTra::ConnectMarket()
 {
-	HOST hostArray[] =
-	{
-		{ "招商深圳行情", "119.147.212.81", 7709 },
-		{ "深圳双线主站1", "120.79.60.82", 7709 },
-		{ "上证云行情E328", "58.63.254.191", 7709 },
-		{ "华西B51", "139.217.8.133", 7709 },
-		{ "招商北京行情", "61.49.50.190", 7709 },
-		{ "招商广州行情", "116.57.224.5", 7709 },
-		{ "华西电信ES1", "182.131.7.196", 7709 },
-		{ "华西电信ES2", "182.131.7.198", 7709 },
-		{ "华西电信ES3", "182.131.7.199", 7709 },
-		{ "华西电信ES4", "182.131.7.200", 7709 },
-		{ "华西电信ES5", "182.131.7.211", 7709 },
-		{ "华西移动ES1", "183.221.89.160", 7709 },
-		{ "华西移动ES2", "183.221.89.161", 7709 },
-		{ "华西移动ES3", "183.221.89.162", 7709 },
-		{ "华西联通XX1", "119.4.167.141", 7709 },
-		{ "华西联通XX2", "119.4.167.142", 7709 },
-		{ "国信AZURESS", "40.73.76.10", 443 },
-		{ "国信AZURE云行情", "40.73.76.10", 7709 },
-		{ "国信东莞移动", "120.234.57.15", 7709 },
-		{ "上证云行情N491", "117.184.225.184", 7709 },
-		{ "上证云行情S351", "120.232.150.205", 7709 },
-		{ "上证云行情R370", "117.175.57.172", 7709 },
-		{ "上证云行情K459", "123.125.108.57", 7709 },
-		{ "上证云行情E923", "58.63.254.247", 7709 }
-	};
+	//HOST hostArray[] =
+	//{
+	//	{ "招商深圳行情", "119.147.212.81", 7709 },
+	//	{ "深圳双线主站1", "120.79.60.82", 7709 },
+	//	{ "上证云行情E328", "58.63.254.191", 7709 },
+	//	{ "华西B51", "139.217.8.133", 7709 },
+	//	{ "招商北京行情", "61.49.50.190", 7709 },
+	//	{ "招商广州行情", "116.57.224.5", 7709 },
+	//	{ "华西电信ES1", "182.131.7.196", 7709 },
+	//	{ "华西电信ES2", "182.131.7.198", 7709 },
+	//	{ "华西电信ES3", "182.131.7.199", 7709 },
+	//	{ "华西电信ES4", "182.131.7.200", 7709 },
+	//	{ "华西电信ES5", "182.131.7.211", 7709 },
+	//	{ "华西移动ES1", "183.221.89.160", 7709 },
+	//	{ "华西移动ES2", "183.221.89.161", 7709 },
+	//	{ "华西移动ES3", "183.221.89.162", 7709 },
+	//	{ "华西联通XX1", "119.4.167.141", 7709 },
+	//	{ "华西联通XX2", "119.4.167.142", 7709 },
+	//	{ "国信AZURESS", "40.73.76.10", 443 },
+	//	{ "国信AZURE云行情", "40.73.76.10", 7709 },
+	//	{ "国信东莞移动", "120.234.57.15", 7709 },
+	//	{ "上证云行情N491", "117.184.225.184", 7709 },
+	//	{ "上证云行情S351", "120.232.150.205", 7709 },
+	//	{ "上证云行情R370", "117.175.57.172", 7709 },
+	//	{ "上证云行情K459", "123.125.108.57", 7709 },
+	//	{ "上证云行情E923", "58.63.254.247", 7709 }
+	//};
 	HMODULE TdxApiHMODULE = LoadLibrary("TdxHqApi.dll");
 	TdxHq_Connect = (TdxHq_ConnectDelegate)GetProcAddress(TdxApiHMODULE, "TdxHq_Connect");
 	TdxHq_GetSecurityQuotes = (TdxHq_GetSecurityQuotesDelegate)GetProcAddress(TdxApiHMODULE, "TdxHq_GetSecurityQuotes");
@@ -156,7 +154,7 @@ void CTra::GetCandidate()
 	unsigned int CDDDate = 0, LearnTill = 0;
 	string fn; stringstream ss; ss.clear(); ss.str("");
 	ss << "P" << PREDAY << "F" << FUTURE << "H" << HISSDAY;
-	fn = RulLearn + string("\\") + ss.str() + string("Use.txt");
+	fn = string(dirRulLearn) + string("\\") + ss.str() + string("Use.txt");
 	ifstream infile(fn, ios::in);
 	if (infile.is_open())
 	{
@@ -517,7 +515,7 @@ void CTra::ReadAccountHold()
 {
 	string fn; stringstream ss; ss.clear(); ss.str("");
 	ss << "P" << PREDAY << "F" << FUTURE << "H" << HISSDAY;
-	fn = RstTrade + string("\\") + ss.str() + string("AccountHold.json");
+	fn = string(dirRstTrade) + string("\\") + ss.str() + string("AccountHold.json");
 	ifstream infile(fn, ios::in);
 	if (infile.is_open())
 	{
@@ -634,7 +632,7 @@ void CTra::WriteAccountHold()
 	}
 	string fn; stringstream ss; ss.clear(); ss.str("");
 	ss << "P" << PREDAY << "F" << FUTURE << "H" << HISSDAY;
-	fn = RstTrade + string("\\") + ss.str() + string("AccountHold.json");
+	fn = string(dirRstTrade) + string("\\") + ss.str() + string("AccountHold.json");
 	ofstream outfile(fn, ios::out);
 	if (outfile.is_open())
 	{

@@ -84,11 +84,13 @@
     <ClInclude Include="Changjiang.h" />
     <ClInclude Include="CurAna.h" />
     <ClInclude Include="Data_Struct.h" />
+    <ClInclude Include="HQ.h" />
     <ClInclude Include="Trading.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Changjiang.cpp" />
     <ClCompile Include="CurAna.cpp" />
+    <ClCompile Include="HQ.cpp" />
     <ClCompile Include="json\lib_json\json_reader.cpp" />
     <ClCompile Include="json\lib_json\json_value.cpp" />
     <ClCompile Include="json\lib_json\json_writer.cpp" />

@@ -49,7 +49,10 @@ using namespace std;
 #define MULT (int)floor(pow(48 * PREDAY / 3, 1.0 / (DECAS - 1)))
 #define CLIMB max(min(3.0*FUTURE, 30.0), 10.0)
 #define DROP -min(0.5*CLIMB, 9.0)
-extern string MktDatas;
+#define dirMktDatas "dirMktDatas"
+#define dirRulLearn "dirRulLearn"
+#define dirRstTrade "dirRstTrade"
+
 
 typedef struct tagMONEY
 {
@@ -284,7 +287,10 @@ typedef enum {
 	Time_Monitor,
 	Time_Clean,
 	Time_Candidate,
-	Time_Open
+	Time_Open,
+	Time_MorningMarket,
+	Time_HalfMarket,
+	Time_AlldayMarket
 }TRADINGTIME;
 inline TRADINGTIME TradingTime()
 {
@@ -301,6 +307,18 @@ inline TRADINGTIME TradingTime()
 	if (0.1300 <= tm  && tm < 0.1305)return Time_Open;
 	if (0.1305 <= tm  && tm < 0.1500)return Time_Monitor;
 	if (0.1500 <= tm  && tm < 0.1510)return Time_Pause;
+	return Time_Stop;
+}
+inline TRADINGTIME Marketingtime()
+{
+	SYSTEMTIME sys_time; GetLocalTime(&sys_time);
+	int dayofweek = (int)sys_time.wDayOfWeek;
+	if (dayofweek == 6 || dayofweek == 0)return Time_Stop;
+	double tm = (double)((sys_time.wHour) / 10e1) + (double)((sys_time.wMinute) / 10e3)
+		+ (double)((sys_time.wSecond) / 10e5);
+	if (0.0830 <= tm  && tm <= 0.1133)return  Time_MorningMarket;
+	if (0.1133 <= tm  && tm <= 0.1400)return  Time_HalfMarket;
+	if (0.1733 <= tm  && tm <= 0.1900)return  Time_AlldayMarket;
 	return Time_Stop;
 }
 inline unsigned int SysDate()
@@ -332,6 +350,7 @@ inline string TimeHMS()
 	strftime(tmp, sizeof(tmp), "%H:%M:%S", localtime(&timep));
 	return tmp;
 }
+
 inline void SysTimeDelta(const SYSTEMTIME &sysTmOrigin, int secDelta, SYSTEMTIME &sysTmObject)
 {
 	struct tm tmStruct = { sysTmOrigin.wSecond, sysTmOrigin.wMinute, sysTmOrigin.wHour, sysTmOrigin.wDay, sysTmOrigin.wMonth - 1, sysTmOrigin.wYear - 1900, sysTmOrigin.wDayOfWeek, 0, 0 };
@@ -363,41 +382,47 @@ inline void Strip(CHAR* text, const char* delim)
 inline void GetCalendar(deque<unsigned int>&calendar)
 {
 	calendar.clear();
-	string fn = MktDatas + "\\calendarTillNow.txt";
-	ifstream infile(fn, ios::binary | ios::in);
+	string fn = string(dirMktDatas) + "\\calendarTillNow.txt";
+	ifstream infile(fn, ios::in);
 	if (infile.is_open())
 	{
-		unsigned int date;
-		while (infile.read((char*)&date, sizeof(date)))
-			calendar.push_back(date);
-		infile.close(); 
-	}
-	sort(calendar.begin(), calendar.end());
-
-	//fn = string("F:\\ScDatas\\HisFZ5");
-	//_finddata_t info; intptr_t handle = _findfirst((fn + string("\\*.5")).c_str(), &info);
-	_finddata_t info; intptr_t handle = _findfirst((MktDatas + string("\\daily\\*.5")).c_str(), &info);
-	if (handle <= 0) { cerr << __FUNCTION__ << "	SCD Read error!" << endl; return; }
-	do
-	{
-		if (info.attrib == _A_SUBDIR)continue;
-		string dn(info.name);
-		if (dn.substr(dn.length() - 2, 2) == string(".5"))
+		char line[64];
+		while (infile.getline(line,sizeof(line)))
 		{
-			unsigned int date = atol(dn.substr(0, 8).c_str());
-			if (calendar.empty() || (date<calendar.front() || calendar.back()<date))
-				calendar.push_back((unsigned int)(date));
+			unsigned int date = (unsigned int)atol(string(line).c_str());
+			if (20150101 <= date && date <= 20301231)
+				calendar.push_back(date);
 		}
-	} while (_findnext(handle, &info) >= 0);
-	_findclose(handle);
-	sort(calendar.begin(), calendar.end());
-	ofstream outfile(fn, ios::binary | ios::trunc);
+		infile.close(); 
+		sort(calendar.begin(), calendar.end());
+	}
+	//_finddata_t info; intptr_t handle = _findfirst((string("F:\\ScDatas\\HisFZ5\\*.5")).c_str(), &info);
+	_finddata_t info; intptr_t handle = _findfirst((string(dirMktDatas) + string("\\daily\\*.5")).c_str(), &info);
+	if (handle > 0) 
+	{
+		do
+		{
+			if (info.attrib == _A_SUBDIR)continue;
+			string dn(info.name);
+			if (dn.substr(dn.length() - 2, 2) == string(".5"))
+			{
+				unsigned int date = (unsigned int)atol(dn.substr(0, 8).c_str());
+				if (date<20150101 || 20301231<date)continue;
+				if (!calendar.empty() && (calendar.front() <= date && date <= calendar.back()))continue;
+				calendar.push_back((date));
+			}
+		} while (_findnext(handle, &info) >= 0);
+		_findclose(handle);
+		sort(calendar.begin(), calendar.end());
+	}
+	ofstream outfile(fn, ios::out | ios::trunc);
 	if (outfile.is_open())
 	{
-		outfile.write((char*)calendar.front(), calendar.size() * sizeof(calendar.front()));
+		for (auto it = calendar.begin(); it != calendar.end(); ++it)
+			outfile << *it << endl;
+		//outfile.write((char*)&calendar.front(), calendar.size() * sizeof(unsigned int));
 		outfile.close();
 	}
-	return;
 }
 typedef struct tagHOST
 {
@@ -557,16 +582,14 @@ inline void ResolveShortcut(LPCOLESTR wChar, PTCHAR szPath)
 	}
 }
 
-
-
 typedef char ScCode[8];
 typedef char ScName[16];
 struct Scu
 {
 	short imkt;
 	short type;//0:zhuban,1:chuangyeban;2:jijin;3:zhishu
-	ScCode cd;
-	ScName nm;
+	ScCode code;
+	ScName name;
 };
 struct Fram
 {
@@ -577,6 +600,15 @@ struct Fram
 	float fit;
 	int clsd;
 	float posopn, poshig, poscls;
+};
+struct Tick
+{
+	char time[6];
+	double pric;
+	unsigned int amou;//sz;lots;idx:money;
+	unsigned int tiks;//sz:bishu;sh gupiao;0;
+	short drec;
+	//int resv;
 };
 struct Fz
 {
@@ -590,19 +622,33 @@ struct Fz
 	unsigned int mn;
 	//int rs;
 };
+struct Category
+{
+	char type[64];
+	char file[64];
+	int beging;
+	int size;
+};
 struct Capital
 {
 	unsigned int date = 0;
 	double totals = 0.0;
 	double current = 0.0;
 	double limited = 0.0;
-};
+}; 
 struct CompanyInfo
 {
 	Scu scu;
 	vector<Capital>vcapitals;
 	unsigned int listdate = 0;
 };
+struct Receiv
+{
+	Scu scu;
+	vector<Tick>vticks;
+	Fz* fzs;
+};
+
 struct His
 {
 	double afit;
@@ -712,6 +758,33 @@ inline void Email163(string targetEmail, string emailTitle, string content, stri
 	return;
 }
 
+HOST hostArray[] =
+{
+	{ "招商深圳行情", "119.147.212.81", 7709 },
+	{ "深圳双线主站1", "120.79.60.82", 7709 },
+	{ "上证云行情E328", "58.63.254.191", 7709 },
+	{ "华西B51", "139.217.8.133", 7709 },
+	{ "招商北京行情", "61.49.50.190", 7709 },
+	{ "招商广州行情", "116.57.224.5", 7709 },
+	{ "华西电信ES1", "182.131.7.196", 7709 },
+	{ "华西电信ES2", "182.131.7.198", 7709 },
+	{ "华西电信ES3", "182.131.7.199", 7709 },
+	{ "华西电信ES4", "182.131.7.200", 7709 },
+	{ "华西电信ES5", "182.131.7.211", 7709 },
+	{ "华西移动ES1", "183.221.89.160", 7709 },
+	{ "华西移动ES2", "183.221.89.161", 7709 },
+	{ "华西移动ES3", "183.221.89.162", 7709 },
+	{ "华西联通XX1", "119.4.167.141", 7709 },
+	{ "华西联通XX2", "119.4.167.142", 7709 },
+	{ "国信AZURESS", "40.73.76.10", 443 },
+	{ "国信AZURE云行情", "40.73.76.10", 7709 },
+	{ "国信东莞移动", "120.234.57.15", 7709 },
+	{ "上证云行情N491", "117.184.225.184", 7709 },
+	{ "上证云行情S351", "120.232.150.205", 7709 },
+	{ "上证云行情R370", "117.175.57.172", 7709 },
+	{ "上证云行情K459", "123.125.108.57", 7709 },
+	{ "上证云行情E923", "58.63.254.247", 7709 }
+};
 
 #endif
 

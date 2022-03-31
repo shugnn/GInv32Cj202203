@@ -3,8 +3,6 @@
 //#include<iomanip>
 //#include<process.h>
 #include"CurAna.h"
-extern string MktDatas;
-extern string RulLearn;
 extern HANDLE hmut;
 //string DatasFZ = string("F:\\ScDatas\\HisFZ5");
 string DirStd = string("F:\\ScDatas\\INVESTING\\Inv64-2\\Result");
@@ -38,7 +36,7 @@ CAna::CAna(bool l_u, deque<unsigned int>&clndr)
 
 		msmisumyss.clear();
 		stringstream ss; ss.clear();
-		ss << RulLearn << "\\P" << PREDAY << "F" << FUTURE << "H" << HISSDAY << "msmisumyss.txt";
+		ss << dirRulLearn << "\\P" << PREDAY << "F" << FUTURE << "H" << HISSDAY << "msmisumyss.txt";
 		string fn = ss.str(); ss.str("");
 		ifstream infile1(fn, ios::in);
 		if (infile1.is_open())
@@ -80,7 +78,7 @@ CAna::CAna(bool l_u, deque<unsigned int>&clndr)
 	{
 		vcombs.reserve(100);
 		stringstream ss; ss.clear();
-		ss << RulLearn << "\\P" << PREDAY << "F" << FUTURE << "H" << HISSDAY << "Learn.txt";
+		ss << dirRulLearn << "\\P" << PREDAY << "F" << FUTURE << "H" << HISSDAY << "Learn.txt";
 		string fn = ss.str(); ss.str("");
 		ifstream infile(fn, ios::in);
 		if (infile.is_open())
@@ -196,7 +194,7 @@ unsigned int CAna::Start()
 			if (res.second)imsframs = res.first;
 		}
 		for (vector<Fram>::iterator ifram = vframs.begin(); ifram <vframs.begin() + (int)min(100, vframs.size()); ++ifram)
-			imsframs->second.insert(map<string, Fram>::value_type(ifram->scu.cd, *ifram));
+			imsframs->second.insert(map<string, Fram>::value_type(ifram->scu.code, *ifram));
 		vframs.clear(); vframs.swap(vector<Fram>());
 
 		if (mmframss.empty() || (dtod - HISSDAY) == calendar.end() || *(dtod - HISSDAY) < mmframss.begin()->first)continue;
@@ -246,7 +244,7 @@ unsigned int CAna::Start()
 void CAna::ReadCominf()
 {
 	mcompanyinfos.clear();
-	string fn = MktDatas + "\\" + "captals.bin";
+	string fn = string(dirMktDatas) + "\\" + "captals.bin";
 	ifstream infile(fn, ios::binary | ios::in);
 	if (infile.is_open())
 	{
@@ -264,12 +262,12 @@ void CAna::ReadCominf()
 			infile.read((char*)&size, sizeof(size));
 			if (size > 0)
 			{
-				auto md = mcompanyinfos.find(scu.cd);
+				auto md = mcompanyinfos.find(scu.code);
 				if (mcompanyinfos.end() == md)
 				{
 					CompanyInfo companyinfo;
 					companyinfo.vcapitals.reserve(size); companyinfo.listdate = listdate; companyinfo.scu = scu;
-					auto res = mcompanyinfos.insert(map<string, CompanyInfo>::value_type(scu.cd, companyinfo));
+					auto res = mcompanyinfos.insert(map<string, CompanyInfo>::value_type(scu.code, companyinfo));
 					if (res.second)md = res.first;
 				}
 				for (unsigned int i = 0; i < size; i++)
@@ -322,9 +320,9 @@ void CAna::ReadFzs(const deque<unsigned int>::iterator dfut)
 {
 	stringstream sss; ifstream infile;
 	sss.clear(); sss.str(""); sss << *dfut;
-	infile.open(MktDatas + string("\\") + sss.str() + string(".5"), ios::binary | ios::in);
+	infile.open(string(dirMktDatas) + string("\\") + sss.str() + string(".5"), ios::binary | ios::in);
 	if (!infile.is_open())
-		infile.open(MktDatas + string("\\") + sss.str() + string("H.5"), ios::binary | ios::in);
+		infile.open(string(dirMktDatas) + string("\\") + sss.str() + string("H.5"), ios::binary | ios::in);
 	if (infile.is_open())
 	{
 		Scu scu; infile.seekg(0, ios::beg);
@@ -337,11 +335,11 @@ void CAna::ReadFzs(const deque<unsigned int>::iterator dfut)
 				{
 					if (scu.type < 2)
 					{
-						auto mlfzss = mmlfzsss.find(scu.cd);
+						auto mlfzss = mmlfzsss.find(scu.code);
 						if (mmlfzsss.end() == mlfzss)
 						{
 							map<unsigned int, Fz*>mlfenzss;
-							auto res = mmlfzsss.insert(map<string, map<unsigned int, Fz*>>::value_type(scu.cd, mlfenzss));
+							auto res = mmlfzsss.insert(map<string, map<unsigned int, Fz*>>::value_type(scu.code, mlfenzss));
 							if (res.second)mlfzss = res.first;
 						}
 						Fz *fzs = new Fz[48]();
