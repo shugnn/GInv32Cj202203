@@ -1,0 +1,152 @@
+{
+   "date" : "20220325",
+   "mholds" : [
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 9,
+         "holdHighestPrice" : 8.730,
+         "holdLowestPrice" : 8.699999999999999,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "0028576766",
+            "codes" : "002408",
+            "costPrice" : 8.824999999999999,
+            "marketCode" : "1",
+            "marketName" : "深圳Ａ股",
+            "marketPrice" : 8.699999999999999,
+            "marketValue" : 3488.0,
+            "profit" : -42.080,
+            "profitPercent" : -1.3030,
+            "stkAvailable" : 400,
+            "stkBalance" : 400,
+            "stkName" : "齐翔腾达"
+         },
+         "trdDateLast" : "20220315",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 11,
+         "holdHighestPrice" : 16.6900010,
+         "holdLowestPrice" : 16.6399990,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "0028576766",
+            "codes" : "300418",
+            "costPrice" : 19.6540,
+            "marketCode" : "1",
+            "marketName" : "深圳Ａ股",
+            "marketPrice" : 16.6399990,
+            "marketValue" : 13336.0,
+            "profit" : -2387.310,
+            "profitPercent" : -15.2340,
+            "stkAvailable" : 800,
+            "stkBalance" : 800,
+            "stkName" : "昆仑万维"
+         },
+         "trdDateLast" : "20220311",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 44,
+         "holdHighestPrice" : 75.93000000000001,
+         "holdLowestPrice" : 75.84999999999999,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "A613813304",
+            "codes" : "601012",
+            "costPrice" : 80.08199999999999,
+            "marketCode" : "2",
+            "marketName" : "上海Ａ股",
+            "marketPrice" : 75.9000020,
+            "marketValue" : 7585.0,
+            "profit" : -423.160,
+            "profitPercent" : -5.3220,
+            "stkAvailable" : 100,
+            "stkBalance" : 100,
+            "stkName" : "隆基股份"
+         },
+         "trdDateLast" : "20220118",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 10,
+         "holdHighestPrice" : 112.5199970,
+         "holdLowestPrice" : 112.1999970,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "A613813304",
+            "codes" : "603806",
+            "costPrice" : 117.6920,
+            "marketCode" : "2",
+            "marketName" : "上海Ａ股",
+            "marketPrice" : 112.1999970,
+            "marketValue" : 11247.0,
+            "profit" : -522.240,
+            "profitPercent" : -4.4790,
+            "stkAvailable" : 100,
+            "stkBalance" : 100,
+            "stkName" : "福斯特"
+         },
+         "trdDateLast" : "20220314",
+         "updated" : true
+      }
+   ],
+   "money" : {
+      "amountAvailable" : 9758.959999999999,
+      "amountDesirable" : 9758.959999999999,
+      "balance" : 9758.959999999999,
+      "holdProfit" : -3374.790,
+      "marketValue" : 35656.0,
+      "totalAssets" : 45414.960
+   },
+   "mtodentrusts" : null,
+   "mtodorders" : [
+      {
+         "businessName" : "申购",
+         "codes" : "301268",
+         "declareId" : "2358",
+         "entrustId" : "2358",
+         "entrustPrice_protectPrice" : 28.50,
+         "entrustTime" : "09:49:56",
+         "entrustVolume" : 6500,
+         "isProtectPrice" : false,
+         "operate" : "买入",
+         "remarks" : ":已确认",
+         "retreatVolume" : 0,
+         "stkName" : "铭利达",
+         "trdPrice" : 0.0,
+         "trdVolume" : 0
+      },
+      {
+         "businessName" : "申购",
+         "codes" : "754466",
+         "declareId" : "2370",
+         "entrustId" : "2370",
+         "entrustPrice_protectPrice" : 100.0,
+         "entrustTime" : "09:50:05",
+         "entrustVolume" : 10000,
+         "isProtectPrice" : false,
+         "operate" : "买入",
+         "remarks" : ":已确认",
+         "retreatVolume" : 0,
+         "stkName" : "风语发债",
+         "trdPrice" : 0.0,
+         "trdVolume" : 0
+      }
+   ]
+}

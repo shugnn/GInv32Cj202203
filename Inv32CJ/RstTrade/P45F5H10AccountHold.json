@@ -1,0 +1,118 @@
+{
+   "date" : "20220325",
+   "mholds" : [
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 9,
+         "holdHighestPrice" : 8.699999999999999,
+         "holdLowestPrice" : 8.699999999999999,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "0028576766",
+            "codes" : "002408",
+            "costPrice" : 8.824999999999999,
+            "marketCode" : "1",
+            "marketName" : "深圳Ａ股",
+            "marketPrice" : 8.699999999999999,
+            "marketValue" : 3480.0,
+            "profit" : -50.080,
+            "profitPercent" : -1.4160,
+            "stkAvailable" : 400,
+            "stkBalance" : 400,
+            "stkName" : "齐翔腾达"
+         },
+         "trdDateLast" : "20220315",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 11,
+         "holdHighestPrice" : 16.640,
+         "holdLowestPrice" : 16.640,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "0028576766",
+            "codes" : "300418",
+            "costPrice" : 19.6540,
+            "marketCode" : "1",
+            "marketName" : "深圳Ａ股",
+            "marketPrice" : 16.640,
+            "marketValue" : 13312.0,
+            "profit" : -2411.310,
+            "profitPercent" : -15.3350,
+            "stkAvailable" : 800,
+            "stkBalance" : 800,
+            "stkName" : "昆仑万维"
+         },
+         "trdDateLast" : "20220311",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 44,
+         "holdHighestPrice" : 75.90000000000001,
+         "holdLowestPrice" : 75.90000000000001,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "A613813304",
+            "codes" : "601012",
+            "costPrice" : 80.08199999999999,
+            "marketCode" : "2",
+            "marketName" : "上海Ａ股",
+            "marketPrice" : 75.90000000000001,
+            "marketValue" : 7590.0,
+            "profit" : -418.160,
+            "profitPercent" : -5.2220,
+            "stkAvailable" : 100,
+            "stkBalance" : 100,
+            "stkName" : "隆基股份"
+         },
+         "trdDateLast" : "20220118",
+         "updated" : true
+      },
+      {
+         "closeDate" : "",
+         "closePrice" : 0.0,
+         "closeVolume" : 0,
+         "holdDays" : 10,
+         "holdHighestPrice" : 112.20,
+         "holdLowestPrice" : 112.20,
+         "isDeclaring" : false,
+         "remark" : "OpenBefore",
+         "stock" : {
+            "accountId" : "A613813304",
+            "codes" : "603806",
+            "costPrice" : 117.6920,
+            "marketCode" : "2",
+            "marketName" : "上海Ａ股",
+            "marketPrice" : 112.20,
+            "marketValue" : 11220.0,
+            "profit" : -549.240,
+            "profitPercent" : -4.6660,
+            "stkAvailable" : 100,
+            "stkBalance" : 100,
+            "stkName" : "福斯特"
+         },
+         "trdDateLast" : "20220314",
+         "updated" : true
+      }
+   ],
+   "money" : {
+      "amountAvailable" : 9758.959999999999,
+      "amountDesirable" : 9758.959999999999,
+      "balance" : 9758.959999999999,
+      "holdProfit" : -3428.790,
+      "marketValue" : 35602.0,
+      "totalAssets" : 45360.960
+   },
+   "mtodentrusts" : null
+}
